@@ -1,5 +1,5 @@
 # ============================================================
-# preprocessing.py — The 6 preprocessing methods
+# preprocessing.py — Les 6 méthodes de preprocessing
 # ============================================================
 
 import re
@@ -18,29 +18,29 @@ lemmatizer = WordNetLemmatizer()
 stemmer    = PorterStemmer()
 
 
-# ── Common base cleaning for all methods ───────────────────
+# ── Nettoyage de base commun à toutes les méthodes ──────────
 
 def clean_base(text):
-    """Common cleaning: lowercase, URLs, mentions, punctuation."""
+    """Nettoyage commun : lowercase, URLs, mentions, ponctuation."""
     text = str(text).lower()
-    text = re.sub(r'http\S+|www\S+', '', text)   # remove URLs
-    text = re.sub(r'@\w+', '', text)              # remove mentions
-    text = re.sub(r'#', '', text)                 # keep the hashtag word text
-    text = re.sub(r'[^a-z\s]', '', text)          # keep letters only
+    text = re.sub(r'http\S+|www\S+', '', text)   # supprimer URLs
+    text = re.sub(r'@\w+', '', text)              # supprimer mentions
+    text = re.sub(r'#', '', text)                 # garder le mot du hashtag
+    text = re.sub(r'[^a-z\s]', '', text)          # garder lettres seulement
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
 
-# ── 6 preprocessing methods ─────────────────────────────────
+# ── 6 méthodes de preprocessing ─────────────────────────────
 
 def preprocess_tokenization(text):
-    """Simple tokenization — no word transformations."""
+    """Tokenization simple — aucune transformation des mots."""
     text = clean_base(text)
     return " ".join([w for w in text.split() if len(w) > 1])
 
 
 def preprocess_stopwords(text):
-    """Tokenization + stop-words removal."""
+    """Tokenization + suppression des stop-words."""
     text = clean_base(text)
     return " ".join([w for w in text.split()
                      if w not in stop_words and len(w) > 1])
@@ -54,14 +54,14 @@ def preprocess_stemming(text):
 
 
 def preprocess_lemmatization(text):
-    """Stop-words + lemmatization (better → good)."""
+    """Stop-words + lemmatisation (better → good)."""
     text = clean_base(text)
     words = [w for w in text.split() if w not in stop_words and len(w) > 1]
     return " ".join([lemmatizer.lemmatize(w) for w in words])
 
 
 def preprocess_stemming_plus(text):
-    """Stemming + repeated letters correction (looove → love)."""
+    """Stemming + correction lettres répétées (looove → love)."""
     text = clean_base(text)
     text = re.sub(r'(.)\1{2,}', r'\1\1', text)
     words = [w for w in text.split() if w not in stop_words and len(w) > 1]
@@ -69,14 +69,14 @@ def preprocess_stemming_plus(text):
 
 
 def preprocess_lemma_misspell(text):
-    """Lemmatization + repeated letters correction."""
+    """Lemmatisation + correction lettres répétées."""
     text = clean_base(text)
     text = re.sub(r'(.)\1{2,}', r'\1\1', text)
     words = [w for w in text.split() if w not in stop_words and len(w) > 1]
     return " ".join([lemmatizer.lemmatize(w) for w in words])
 
 
-# ── Dictionary of all methods ──────────────────────────────
+# ── Dictionnaire de toutes les méthodes ─────────────────────
 
 PREPROCESSING_METHODS = {
     "tokenization":           preprocess_tokenization,
